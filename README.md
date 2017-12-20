@@ -5,6 +5,7 @@ Features:
 
 ## Installation
 `go get github.com/interactive-solutions/go-logrus-elasticsearch`
+
 `glide get github.com/interactive-solutions/go-logrus-elasticsearch`
 
 ## Usage
