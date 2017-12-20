@@ -1,4 +1,4 @@
-package go_logrus_elasticsearch
+package elastic_logrus
 
 import (
 	"fmt"
@@ -17,8 +17,6 @@ var (
 	// index is not created
 	ErrCannotCreateIndex = fmt.Errorf("Cannot create index")
 )
-
-const FlushInterval = time.Second * 15
 
 type IndexNameFunc func() string
 

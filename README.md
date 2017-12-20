@@ -22,6 +22,7 @@ import (
     
     "github.com/pkg/errors"
     "github.com/sirupsen/logrus"
+    "github.com/interactive-solutions/go-logrus-elasticsearch"
     "gopkg.in/olivere/elastic.v5"
 )
     
@@ -36,7 +37,7 @@ func main() {
     }
     
     // Create logger with 15 seconds flush interval
-    hook, err := logging.NewElasticHook(client, "some-host", logrus.DebugLevel, func() string {
+    hook, err := elastic_logrus.NewElasticHook(client, "some-host", logrus.DebugLevel, func() string {
         return fmt.Sprintf("%s-%s", "some-index", time.Now().Format("2006-01-02"))
     }, time.Second * 15)
     
