@@ -1,8 +1,0 @@
-package: github.com/interactive-solutions/go-logrus-elasticsearch
-import:
-- package: github.com/pkg/errors
-  version: ^0.8.0
-- package: gopkg.in/olivere/elastic.v5
-  version: ^5.0.38
-- package: github.com/sirupsen/logrus
-  version: ^1.0.0

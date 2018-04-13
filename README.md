@@ -6,7 +6,7 @@ Features:
 ## Installation
 `go get github.com/interactive-solutions/go-logrus-elasticsearch`
 
-`glide get github.com/interactive-solutions/go-logrus-elasticsearch`
+`dep ensure -add github.com/interactive-solutions/go-logrus-elasticsearch`
 
 ## Usage
 ```go
@@ -23,7 +23,7 @@ import (
     "github.com/pkg/errors"
     "github.com/sirupsen/logrus"
     "github.com/interactive-solutions/go-logrus-elasticsearch"
-    "gopkg.in/olivere/elastic.v5"
+    "github.com/olivere/elastic"
 )
     
 func main() {

@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
-	"gopkg.in/olivere/elastic.v5"
+	"github.com/olivere/elastic"
 )
 
 var (
