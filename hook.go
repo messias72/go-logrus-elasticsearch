@@ -7,9 +7,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/olivere/elastic"
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
-	"github.com/olivere/elastic"
 )
 
 var (
@@ -101,21 +101,12 @@ func (hook *ElasticSearchHook) Fire(entry *logrus.Entry) error {
 		}
 	}
 
-	msg := struct {
-		Host      string
-		Timestamp string `json:"@timestamp"`
-		Message   string
-		Data      logrus.Fields
-		Level     string
-	}{
-		hook.host,
-		entry.Time.UTC().Format(time.RFC3339Nano),
-		entry.Message,
-		entry.Data,
-		strings.ToUpper(level),
-	}
+	entry.Data["Host"] = hook.host
+	entry.Data["@timestamp"] = entry.Time.UTC().Format(time.RFC3339Nano)
+	entry.Data["Message"] = entry.Message
+	entry.Data["Level"] = strings.ToUpper(level)
 
-	r := elastic.NewBulkIndexRequest().Index(hook.index()).Type("log").Doc(msg)
+	r := elastic.NewBulkIndexRequest().Index(hook.index()).Type("log").Doc(entry.Data)
 	hook.processor.Add(r)
 
 	return nil
