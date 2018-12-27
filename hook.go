@@ -93,20 +93,27 @@ func NewElasticHook(
 }
 
 func (hook *ElasticSearchHook) Fire(entry *logrus.Entry) error {
-	level := entry.Level.String()
+	data := map[string]interface{}{
+		"Host":       hook.host,
+		"@timestamp": entry.Time.UTC().Format(time.RFC3339Nano),
+		"Message":    entry.Message,
+		"Level":      strings.ToUpper(entry.Level.String()),
+	}
 
-	if e, ok := entry.Data[logrus.ErrorKey]; ok && e != nil {
+	for k, v := range entry.Data {
+		data[k] = v
+	}
+
+	if e, ok := data[logrus.ErrorKey]; ok && e != nil {
 		if err, ok := e.(error); ok {
-			entry.Data[logrus.ErrorKey] = err.Error()
+			data[logrus.ErrorKey] = err.Error()
 		}
 	}
 
-	entry.Data["Host"] = hook.host
-	entry.Data["@timestamp"] = entry.Time.UTC().Format(time.RFC3339Nano)
-	entry.Data["Message"] = entry.Message
-	entry.Data["Level"] = strings.ToUpper(level)
+	r := elastic.NewBulkIndexRequest().
+		Index(hook.index()).Type("log").
+		Doc(data)
 
-	r := elastic.NewBulkIndexRequest().Index(hook.index()).Type("log").Doc(entry.Data)
 	hook.processor.Add(r)
 
 	return nil
